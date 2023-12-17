@@ -5,6 +5,7 @@ import {
   Image,
   Dimensions,
   TouchableOpacity,
+  StyleSheet,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -15,32 +16,18 @@ import {
 } from 'react-native-responsive-dimensions';
 import {FlatList} from 'react-native-gesture-handler';
 import {useDispatch, useSelector} from 'react-redux';
-import { deleteNote } from '../redux/NoteSlice';
+import {deleteNote} from '../redux/NoteSlice';
 
 const Notes = () => {
   const navigation = useNavigation();
   const notes = useSelector(state => state.note);
 
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <View
-        style={{
-          width: Dimensions.get('window').width - 10,
-          height: Dimensions.get('window').height / 17,
-          backgroundColor: '#4CB9E7',
-          padding: 10,
-          marginLeft: 1,
-        }}>
-        <Text
-          style={{
-            fontWeight: '600',
-            fontSize: responsiveFontSize(3),
-            color: '#fff',
-          }}>
-          Notes
-        </Text>
+      <View style={styles.mainView}>
+        <Text style={styles.headertxt}>Notes</Text>
       </View>
 
       <FlatList
@@ -58,7 +45,7 @@ const Notes = () => {
                 borderWidth: 1,
                 justifyContent: 'space-between',
                 flexDirection: 'row',
-                backgroundColor:item.color
+                backgroundColor: item.color,
               }}>
               <View style={{width: '85%'}}>
                 <Text style={{fontWeight: '600', fontSize: 20}}>
@@ -67,9 +54,14 @@ const Notes = () => {
                 <Text style={{marginTop: 20}}>{item.data}</Text>
               </View>
               <View style={{right: 29}}>
-                <TouchableOpacity  onPress={() => {
-          navigation.navigate('AddNotes',{type:'edit',data:item,index:index});
-        }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('AddNotes', {
+                      type: 'edit',
+                      data: item,
+                      index: index,
+                    });
+                  }}>
                   <Text
                     style={{
                       borderColor: 'blue',
@@ -80,9 +72,10 @@ const Notes = () => {
                     Edit
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{
-                  dispatch(deleteNote(index))
-                }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    dispatch(deleteNote(index));
+                  }}>
                   <Text
                     style={{
                       marginTop: 10,
@@ -108,7 +101,7 @@ const Notes = () => {
           right: responsiveWidth(6),
         }}
         onPress={() => {
-          navigation.navigate('AddNotes',{type:'add'});
+          navigation.navigate('AddNotes', {type: 'add'});
         }}>
         <Image
           source={require('../Images/plus.png')}
@@ -120,3 +113,17 @@ const Notes = () => {
 };
 
 export default Notes;
+const styles = StyleSheet.create({
+  mainView: {
+    width: Dimensions.get('window').width - 10,
+    height: Dimensions.get('window').height / 17,
+    backgroundColor: '#4CB9E7',
+    padding: 10,
+    marginLeft: 1,
+  },
+  headertxt: {
+    fontWeight: '600',
+    fontSize: responsiveFontSize(3),
+    color: '#fff',
+  },
+});
